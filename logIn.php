@@ -1,32 +1,46 @@
 <?php
 session_start();
 
-// datos de tu base de datos en la nube
-$host = 'mssql-203149-0.cloudclusters.net';
-$db   = 'Tarea2BD';
-$user = 'Espi';
-$pass = 'Espi1234';
+// Datos de conexión a CloudCluster
+$serverName = "mssql-203149-0.cloudclusters.net,10020";
+$connectionOptions = array(
+    "Database" => "Tarea2BD",
+    "Uid" => "Espi",
+    "PWD" => "Espi1234",
+    "Encrypt" => true,
+    "TrustServerCertificate" => true
+);
 
-// conectar a la base de datos
-$conn = new mysqli($host, $user, $pass, $db);
-if ($conn->connect_error) {
-    die("Error de conexión: " . $conn->connect_error);
+// Conectar a la base de datos
+$conn = sqlsrv_connect($serverName, $connectionOptions);
+
+if ($conn === false) {
+    die(print_r(sqlsrv_errors(), true));
 }
 
-// tomar datos del formulario
+// Tomar datos del formulario
 $username = $_POST['username'];
 $password = $_POST['password'];
 
-// consultar la base de datos
-$sql = "SELECT * FROM users WHERE username='$username' AND password='$password'";
-$result = $conn->query($sql);
+// Consultar la base de datos usando el schema correcto y tabla dbo.Usuario
+$sql = "SELECT * FROM dbo.Usuario WHERE username = ? AND password = ?";
+$params = array($username, $password);
 
-if ($result->num_rows > 0) {
+$result = sqlsrv_query($conn, $sql, $params);
+
+if ($result === false) {
+    die(print_r(sqlsrv_errors(), true));
+}
+
+// Verificar si hay resultados
+if (sqlsrv_has_rows($result)) {
     $_SESSION['username'] = $username;
     header("Location: dashboard.php");
+    exit();
 } else {
     echo "Usuario o contraseña incorrectos.";
 }
 
-$conn->close();
+sqlsrv_free_stmt($result);
+sqlsrv_close($conn);
 ?>
