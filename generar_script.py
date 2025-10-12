@@ -37,55 +37,56 @@ with open(archivo_sql_salida, 'w', encoding='utf-8') as f:
     f.write("PRINT '--- 1.1 Cargando Puestos...';\n")
     puestos = root.find('Puestos')
     for puesto in puestos.findall('Puesto'):
-        nombre = puesto.get('Nombre').replace("'", "''") # Reemplazar comillas para evitar errores SQL
+        nombre = puesto.get('Nombre').replace("'", "''")
         salario = puesto.get('SalarioxHora')
-        f.write(f"INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('{nombre}', {salario});\n")
+        f.write(f"IF NOT EXISTS (SELECT 1 FROM Puesto WHERE Nombre = '{nombre}')\n")
+        f.write(f"    INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('{nombre}', {salario});\n")
     f.write("GO\n\n")
 
     # 1.2 Tipos de Evento
     f.write("PRINT '--- 1.2 Cargando Tipos de Evento...';\n")
-    f.write("SET IDENTITY_INSERT TipoEvento ON;\n")
     tipos_evento = root.find('TiposEvento')
+    # quitar las líneas SET IDENTITY_INSERT TipoEvento ON/OFF
     for tipo in tipos_evento.findall('TipoEvento'):
         evento_id = tipo.get('Id')
         nombre = tipo.get('Nombre').replace("'", "''")
-        f.write(f"INSERT INTO TipoEvento (Id, Nombre) VALUES ({evento_id}, '{nombre}');\n")
-    f.write("SET IDENTITY_INSERT TipoEvento OFF;\n")
+        f.write(f"IF NOT EXISTS (SELECT 1 FROM TipoEvento WHERE Id = {evento_id})\n")
+        f.write(f"    INSERT INTO TipoEvento (Id, Nombre) VALUES ({evento_id}, '{nombre}');\n")
     f.write("GO\n\n")
 
     # 1.3 Tipos de Movimiento
     f.write("PRINT '--- 1.3 Cargando Tipos de Movimiento...';\n")
-    f.write("SET IDENTITY_INSERT TipoMovimiento ON;\n")
     tipos_movimiento = root.find('TiposMovimientos')
     for tipo in tipos_movimiento.findall('TipoMovimiento'):
         mov_id = tipo.get('Id')
         nombre = tipo.get('Nombre').replace("'", "''")
         tipo_accion = tipo.get('TipoAccion')
-        f.write(f"INSERT INTO TipoMovimiento (Id, Nombre, TipoAccion) VALUES ({mov_id}, '{nombre}', '{tipo_accion}');\n")
-    f.write("SET IDENTITY_INSERT TipoMovimiento OFF;\n")
+        f.write(f"IF NOT EXISTS (SELECT 1 FROM TipoMovimiento WHERE Id = {mov_id})\n")
+        f.write(f"    INSERT INTO TipoMovimiento (Id, Nombre, TipoAccion) VALUES ({mov_id}, '{nombre}', '{tipo_accion}');\n")
     f.write("GO\n\n")
     
     # 1.4 Usuarios
     f.write("PRINT '--- 1.4 Cargando Usuarios...';\n")
-    f.write("SET IDENTITY_INSERT Usuario ON;\n")
     usuarios = root.find('Usuarios')
+    # sustituir bloque actual por:
     for usuario in usuarios.findall('usuario'):
-        user_id = usuario.get('Id')
         nombre = usuario.get('Nombre').replace("'", "''")
         password = usuario.get('Pass').replace("'", "''")
-        f.write(f"INSERT INTO Usuario (Id, Username, Password) VALUES ({user_id}, '{nombre}', '{password}');\n")
-    f.write("SET IDENTITY_INSERT Usuario OFF;\n")
+        f.write(f"IF NOT EXISTS (SELECT 1 FROM Usuario WHERE Username = '{nombre}')\n")
+        f.write(f"    INSERT INTO Usuario (Username, Password) VALUES ('{nombre}', '{password}');\n")
+
     f.write("GO\n\n")
     
     # 1.5 Errores
     f.write("PRINT '--- 1.5 Cargando Catálogo de Errores...';\n")
     # Asumimos que la tabla se llama 'Error' y la PK es autoincremental
     errores = root.find('Error')
-    for error in errores.findall('errorCodigo'): # Ojo: tu XML tiene 'errorCodigo'
+    for error in errores.findall('errorCodigo'):
         codigo = error.get('Codigo')
         descripcion = error.get('Descripcion').replace("'", "''")
-        f.write(f"INSERT INTO Error (Codigo, Descripcion) VALUES ('{codigo}', '{descripcion}');\n")
-    f.write("GO\n\n")
+        f.write(f"IF NOT EXISTS (SELECT 1 FROM Error WHERE Codigo = {codigo})\n")
+        f.write(f"    INSERT INTO Error (Codigo, Descripcion) VALUES ({codigo}, '{descripcion}');\n")
+
 
     # --- SECCIÓN 2: CARGA DE EMPLEADOS USANDO EL PROCEDIMIENTO ALMACENADO ---
     f.write("PRINT '--- 2. Cargando Empleados usando SP...';\n")

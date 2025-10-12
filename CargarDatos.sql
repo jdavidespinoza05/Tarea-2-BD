@@ -4,74 +4,114 @@
 -- =================================================================
 
 PRINT '--- 1.1 Cargando Puestos...';
-INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Cajero', 11.00);
-INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Camarero', 10.00);
-INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Cuidador', 13.50);
-INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Conductor', 15.00);
-INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Asistente', 11.00);
-INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Recepcionista', 12.00);
-INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Fontanero', 13.00);
-INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Niñera', 12.00);
-INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Conserje', 11.00);
-INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Albañil', 10.50);
+IF NOT EXISTS (SELECT 1 FROM Puesto WHERE Nombre = 'Cajero')
+    INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Cajero', 11.00);
+IF NOT EXISTS (SELECT 1 FROM Puesto WHERE Nombre = 'Camarero')
+    INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Camarero', 10.00);
+IF NOT EXISTS (SELECT 1 FROM Puesto WHERE Nombre = 'Cuidador')
+    INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Cuidador', 13.50);
+IF NOT EXISTS (SELECT 1 FROM Puesto WHERE Nombre = 'Conductor')
+    INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Conductor', 15.00);
+IF NOT EXISTS (SELECT 1 FROM Puesto WHERE Nombre = 'Asistente')
+    INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Asistente', 11.00);
+IF NOT EXISTS (SELECT 1 FROM Puesto WHERE Nombre = 'Recepcionista')
+    INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Recepcionista', 12.00);
+IF NOT EXISTS (SELECT 1 FROM Puesto WHERE Nombre = 'Fontanero')
+    INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Fontanero', 13.00);
+IF NOT EXISTS (SELECT 1 FROM Puesto WHERE Nombre = 'Niñera')
+    INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Niñera', 12.00);
+IF NOT EXISTS (SELECT 1 FROM Puesto WHERE Nombre = 'Conserje')
+    INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Conserje', 11.00);
+IF NOT EXISTS (SELECT 1 FROM Puesto WHERE Nombre = 'Albañil')
+    INSERT INTO Puesto (Nombre, SalarioxHora) VALUES ('Albañil', 10.50);
 GO
 
 PRINT '--- 1.2 Cargando Tipos de Evento...';
-SET IDENTITY_INSERT TipoEvento ON;
-INSERT INTO TipoEvento (Id, Nombre) VALUES (1, 'Login Exitoso');
-INSERT INTO TipoEvento (Id, Nombre) VALUES (2, 'Login No Exitoso');
-INSERT INTO TipoEvento (Id, Nombre) VALUES (3, 'Login deshabilitado');
-INSERT INTO TipoEvento (Id, Nombre) VALUES (4, 'Logout');
-INSERT INTO TipoEvento (Id, Nombre) VALUES (5, 'Insercion no exitosa');
-INSERT INTO TipoEvento (Id, Nombre) VALUES (6, 'Insercion exitosa');
-INSERT INTO TipoEvento (Id, Nombre) VALUES (7, 'Update no exitoso');
-INSERT INTO TipoEvento (Id, Nombre) VALUES (8, 'Update exitoso');
-INSERT INTO TipoEvento (Id, Nombre) VALUES (9, 'Intento de borrado');
-INSERT INTO TipoEvento (Id, Nombre) VALUES (10, 'Borrado exitoso');
-INSERT INTO TipoEvento (Id, Nombre) VALUES (11, 'Consulta con filtro de nombre');
-INSERT INTO TipoEvento (Id, Nombre) VALUES (12, 'Consulta con filtro de cedula');
-INSERT INTO TipoEvento (Id, Nombre) VALUES (13, 'Intento de insertar movimiento');
-INSERT INTO TipoEvento (Id, Nombre) VALUES (14, 'Insertar movimiento exitoso');
-SET IDENTITY_INSERT TipoEvento OFF;
+IF NOT EXISTS (SELECT 1 FROM TipoEvento WHERE Id = 1)
+    INSERT INTO TipoEvento (Id, Nombre) VALUES (1, 'Login Exitoso');
+IF NOT EXISTS (SELECT 1 FROM TipoEvento WHERE Id = 2)
+    INSERT INTO TipoEvento (Id, Nombre) VALUES (2, 'Login No Exitoso');
+IF NOT EXISTS (SELECT 1 FROM TipoEvento WHERE Id = 3)
+    INSERT INTO TipoEvento (Id, Nombre) VALUES (3, 'Login deshabilitado');
+IF NOT EXISTS (SELECT 1 FROM TipoEvento WHERE Id = 4)
+    INSERT INTO TipoEvento (Id, Nombre) VALUES (4, 'Logout');
+IF NOT EXISTS (SELECT 1 FROM TipoEvento WHERE Id = 5)
+    INSERT INTO TipoEvento (Id, Nombre) VALUES (5, 'Insercion no exitosa');
+IF NOT EXISTS (SELECT 1 FROM TipoEvento WHERE Id = 6)
+    INSERT INTO TipoEvento (Id, Nombre) VALUES (6, 'Insercion exitosa');
+IF NOT EXISTS (SELECT 1 FROM TipoEvento WHERE Id = 7)
+    INSERT INTO TipoEvento (Id, Nombre) VALUES (7, 'Update no exitoso');
+IF NOT EXISTS (SELECT 1 FROM TipoEvento WHERE Id = 8)
+    INSERT INTO TipoEvento (Id, Nombre) VALUES (8, 'Update exitoso');
+IF NOT EXISTS (SELECT 1 FROM TipoEvento WHERE Id = 9)
+    INSERT INTO TipoEvento (Id, Nombre) VALUES (9, 'Intento de borrado');
+IF NOT EXISTS (SELECT 1 FROM TipoEvento WHERE Id = 10)
+    INSERT INTO TipoEvento (Id, Nombre) VALUES (10, 'Borrado exitoso');
+IF NOT EXISTS (SELECT 1 FROM TipoEvento WHERE Id = 11)
+    INSERT INTO TipoEvento (Id, Nombre) VALUES (11, 'Consulta con filtro de nombre');
+IF NOT EXISTS (SELECT 1 FROM TipoEvento WHERE Id = 12)
+    INSERT INTO TipoEvento (Id, Nombre) VALUES (12, 'Consulta con filtro de cedula');
+IF NOT EXISTS (SELECT 1 FROM TipoEvento WHERE Id = 13)
+    INSERT INTO TipoEvento (Id, Nombre) VALUES (13, 'Intento de insertar movimiento');
+IF NOT EXISTS (SELECT 1 FROM TipoEvento WHERE Id = 14)
+    INSERT INTO TipoEvento (Id, Nombre) VALUES (14, 'Insertar movimiento exitoso');
 GO
 
 PRINT '--- 1.3 Cargando Tipos de Movimiento...';
-SET IDENTITY_INSERT TipoMovimiento ON;
-INSERT INTO TipoMovimiento (Id, Nombre, TipoAccion) VALUES (1, 'Cumplir mes', 'Credito');
-INSERT INTO TipoMovimiento (Id, Nombre, TipoAccion) VALUES (2, 'Bono vacacional', 'Credito');
-INSERT INTO TipoMovimiento (Id, Nombre, TipoAccion) VALUES (3, 'Reversion Debito', 'Credito');
-INSERT INTO TipoMovimiento (Id, Nombre, TipoAccion) VALUES (4, 'Disfrute de vacaciones', 'Debito');
-INSERT INTO TipoMovimiento (Id, Nombre, TipoAccion) VALUES (5, 'Venta de vacaciones', 'Debito');
-INSERT INTO TipoMovimiento (Id, Nombre, TipoAccion) VALUES (6, 'Reversion de Credito', 'Debito');
-SET IDENTITY_INSERT TipoMovimiento OFF;
+IF NOT EXISTS (SELECT 1 FROM TipoMovimiento WHERE Id = 1)
+    INSERT INTO TipoMovimiento (Id, Nombre, TipoAccion) VALUES (1, 'Cumplir mes', 'Credito');
+IF NOT EXISTS (SELECT 1 FROM TipoMovimiento WHERE Id = 2)
+    INSERT INTO TipoMovimiento (Id, Nombre, TipoAccion) VALUES (2, 'Bono vacacional', 'Credito');
+IF NOT EXISTS (SELECT 1 FROM TipoMovimiento WHERE Id = 3)
+    INSERT INTO TipoMovimiento (Id, Nombre, TipoAccion) VALUES (3, 'Reversion Debito', 'Credito');
+IF NOT EXISTS (SELECT 1 FROM TipoMovimiento WHERE Id = 4)
+    INSERT INTO TipoMovimiento (Id, Nombre, TipoAccion) VALUES (4, 'Disfrute de vacaciones', 'Debito');
+IF NOT EXISTS (SELECT 1 FROM TipoMovimiento WHERE Id = 5)
+    INSERT INTO TipoMovimiento (Id, Nombre, TipoAccion) VALUES (5, 'Venta de vacaciones', 'Debito');
+IF NOT EXISTS (SELECT 1 FROM TipoMovimiento WHERE Id = 6)
+    INSERT INTO TipoMovimiento (Id, Nombre, TipoAccion) VALUES (6, 'Reversion de Credito', 'Debito');
 GO
 
 PRINT '--- 1.4 Cargando Usuarios...';
-SET IDENTITY_INSERT Usuario ON;
-INSERT INTO Usuario (Id, Username, Password) VALUES (1, 'UsuarioScripts', ')*2LnSr^lk');
-INSERT INTO Usuario (Id, Username, Password) VALUES (2, 'David', '232rr^k');
-INSERT INTO Usuario (Id, Username, Password) VALUES (3, 'Alejandro', 'test');
-INSERT INTO Usuario (Id, Username, Password) VALUES (4, 'Esteban', 'contrasena');
-INSERT INTO Usuario (Id, Username, Password) VALUES (5, 'Daniel', 'himB9Dzd%_');
-INSERT INTO Usuario (Id, Username, Password) VALUES (6, 'Alex', '24himAzzd%_65');
-INSERT INTO Usuario (Id, Username, Password) VALUES (7, 'Usuario No Valido', 'NoSoyValido');
-SET IDENTITY_INSERT Usuario OFF;
+IF NOT EXISTS (SELECT 1 FROM Usuario WHERE Username = 'UsuarioScripts')
+    INSERT INTO Usuario (Username, Password) VALUES ('UsuarioScripts', ')*2LnSr^lk');
+IF NOT EXISTS (SELECT 1 FROM Usuario WHERE Username = 'David')
+    INSERT INTO Usuario (Username, Password) VALUES ('David', '232rr^k');
+IF NOT EXISTS (SELECT 1 FROM Usuario WHERE Username = 'Alejandro')
+    INSERT INTO Usuario (Username, Password) VALUES ('Alejandro', 'test');
+IF NOT EXISTS (SELECT 1 FROM Usuario WHERE Username = 'Esteban')
+    INSERT INTO Usuario (Username, Password) VALUES ('Esteban', 'contrasena');
+IF NOT EXISTS (SELECT 1 FROM Usuario WHERE Username = 'Daniel')
+    INSERT INTO Usuario (Username, Password) VALUES ('Daniel', 'himB9Dzd%_');
+IF NOT EXISTS (SELECT 1 FROM Usuario WHERE Username = 'Alex')
+    INSERT INTO Usuario (Username, Password) VALUES ('Alex', '24himAzzd%_65');
+IF NOT EXISTS (SELECT 1 FROM Usuario WHERE Username = 'Usuario No Valido')
+    INSERT INTO Usuario (Username, Password) VALUES ('Usuario No Valido', 'NoSoyValido');
 GO
 
 PRINT '--- 1.5 Cargando Catálogo de Errores...';
-INSERT INTO Error (Codigo, Descripcion) VALUES ('50001', 'Username no existe');
-INSERT INTO Error (Codigo, Descripcion) VALUES ('50002', 'Password no existe');
-INSERT INTO Error (Codigo, Descripcion) VALUES ('50003', 'Login deshabilitado');
-INSERT INTO Error (Codigo, Descripcion) VALUES ('50004', 'Empleado con ValorDocumentoIdentidad ya existe en inserción');
-INSERT INTO Error (Codigo, Descripcion) VALUES ('50005', 'Empleado con mismo nombre ya existe en inserción');
-INSERT INTO Error (Codigo, Descripcion) VALUES ('50006', 'Empleado con ValorDocumentoIdentidad ya existe en actualizacion');
-INSERT INTO Error (Codigo, Descripcion) VALUES ('50007', 'Empleado con mismo nombre ya existe en actualización');
-INSERT INTO Error (Codigo, Descripcion) VALUES ('50008', 'Error de base de datos');
-INSERT INTO Error (Codigo, Descripcion) VALUES ('50009', 'Nombre de empleado no alfabético');
-INSERT INTO Error (Codigo, Descripcion) VALUES ('50010', 'Valor de documento de identidad no alfabético');
-INSERT INTO Error (Codigo, Descripcion) VALUES ('50011', 'Monto del movimiento rechazado pues si se aplicar el saldo seria negativo.');
-GO
-
+IF NOT EXISTS (SELECT 1 FROM Error WHERE Codigo = 50001)
+    INSERT INTO Error (Codigo, Descripcion) VALUES (50001, 'Username no existe');
+IF NOT EXISTS (SELECT 1 FROM Error WHERE Codigo = 50002)
+    INSERT INTO Error (Codigo, Descripcion) VALUES (50002, 'Password no existe');
+IF NOT EXISTS (SELECT 1 FROM Error WHERE Codigo = 50003)
+    INSERT INTO Error (Codigo, Descripcion) VALUES (50003, 'Login deshabilitado');
+IF NOT EXISTS (SELECT 1 FROM Error WHERE Codigo = 50004)
+    INSERT INTO Error (Codigo, Descripcion) VALUES (50004, 'Empleado con ValorDocumentoIdentidad ya existe en inserción');
+IF NOT EXISTS (SELECT 1 FROM Error WHERE Codigo = 50005)
+    INSERT INTO Error (Codigo, Descripcion) VALUES (50005, 'Empleado con mismo nombre ya existe en inserción');
+IF NOT EXISTS (SELECT 1 FROM Error WHERE Codigo = 50006)
+    INSERT INTO Error (Codigo, Descripcion) VALUES (50006, 'Empleado con ValorDocumentoIdentidad ya existe en actualizacion');
+IF NOT EXISTS (SELECT 1 FROM Error WHERE Codigo = 50007)
+    INSERT INTO Error (Codigo, Descripcion) VALUES (50007, 'Empleado con mismo nombre ya existe en actualización');
+IF NOT EXISTS (SELECT 1 FROM Error WHERE Codigo = 50008)
+    INSERT INTO Error (Codigo, Descripcion) VALUES (50008, 'Error de base de datos');
+IF NOT EXISTS (SELECT 1 FROM Error WHERE Codigo = 50009)
+    INSERT INTO Error (Codigo, Descripcion) VALUES (50009, 'Nombre de empleado no alfabético');
+IF NOT EXISTS (SELECT 1 FROM Error WHERE Codigo = 50010)
+    INSERT INTO Error (Codigo, Descripcion) VALUES (50010, 'Valor de documento de identidad no alfabético');
+IF NOT EXISTS (SELECT 1 FROM Error WHERE Codigo = 50011)
+    INSERT INTO Error (Codigo, Descripcion) VALUES (50011, 'Monto del movimiento rechazado pues si se aplicar el saldo seria negativo.');
 PRINT '--- 2. Cargando Empleados usando SP...';
 DECLARE @IdPuesto INT, @IdUsuarioScripts INT, @ResultCode INT;
 SELECT @IdUsuarioScripts = Id FROM Usuario WHERE Username = 'UsuarioScripts';
