@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// Datos de conexión
+// 🔹 Datos de conexión
 $serverName = "mssql-203149-0.cloudclusters.net,10020";
 $connectionOptions = array(
     "Database" => "Tarea2BD",
@@ -11,34 +11,66 @@ $connectionOptions = array(
     "TrustServerCertificate" => true
 );
 
-// Variable de error inicializada como null
-$error = null;
+$error = "";
 
-// Solo procesar si el usuario envió el formulario
+// 🔹 Cuando el usuario envía el formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
     $username = $_POST['username'];
     $password = $_POST['password'];
+    $ip = $_SERVER['REMOTE_ADDR']; // Detectar IP automáticamente
 
-    // Conectar a la base de datos
+    // Conectar
     $conn = sqlsrv_connect($serverName, $connectionOptions);
 
     if ($conn === false) {
         $error = "❌ Error de conexión a la base de datos.";
     } else {
-        $sql = "SELECT * FROM dbo.Usuario WHERE username = ? AND password = ?";
-        $params = array($username, $password);
-        $result = sqlsrv_query($conn, $sql, $params);
+        // 🔹 Definir variables de salida con tipo explícito
+        $outResultCode = 0;
+        $outUserId = 0;
 
-        if ($result && sqlsrv_has_rows($result)) {
-            $_SESSION['username'] = $username;
-            header("Location: dashboard.php");
-            exit();
+        // 🔹 Preparar la consulta con EXEC
+        $sql = "EXEC dbo.LoginUser 
+                    @inUserName = ?, 
+                    @inPassword = ?, 
+                    @inIP = ?, 
+                    @outResultCode = ?, 
+                    @outUserId = ?";
+
+        $params = array(
+            array($username, SQLSRV_PARAM_IN),
+            array($password, SQLSRV_PARAM_IN),
+            array($ip, SQLSRV_PARAM_IN),
+            array(&$outResultCode, SQLSRV_PARAM_OUT),
+            array(&$outUserId, SQLSRV_PARAM_OUT)
+        );
+
+        $stmt = sqlsrv_query($conn, $sql, $params);
+
+        if ($stmt === false) {
+            $errors = sqlsrv_errors();
+            $error = "⚠️ Error al ejecutar el procedimiento almacenado.<br>";
+            foreach ($errors as $e) {
+                $error .= "Código: " . $e['code'] . " — " . $e['message'] . "<br>";
+            }
         } else {
-            $error = "Usuario o contraseña incorrectos.";
+            // 🔹 Evaluar el código de resultado que devuelve el SP
+            if ($outResultCode === 0) {
+                $_SESSION['username'] = $username;
+                header("Location: dashboard.php");
+                exit();
+            } elseif ($outResultCode === 50001) {
+                $error = "El usuario no existe.";
+            } elseif ($outResultCode === 50002) {
+                $error = "Contraseña incorrecta.";
+            } elseif ($outResultCode === 50003) {
+                $error = "Has superado el número de intentos. Intenta más tarde.";
+            } else {
+                $error = "Error desconocido (Código $outResultCode)";
+            }
         }
 
-        sqlsrv_free_stmt($result);
+        sqlsrv_free_stmt($stmt);
         sqlsrv_close($conn);
     }
 }
@@ -61,9 +93,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <button type="submit">Ingresar</button>
     </form>
 
-    <!-- Mensaje de error solo si hubo un fallo -->
-    <?php if ($error !== null): ?>
-        <p class="error-message"><?= htmlspecialchars($error) ?></p>
+    <?php if ($error): ?>
+        <p class="error-message"><?= $error ?></p>
     <?php endif; ?>
   </div>
 </body>
