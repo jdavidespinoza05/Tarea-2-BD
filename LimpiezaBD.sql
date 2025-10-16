@@ -1,0 +1,28 @@
+USE Tarea2BD;
+GO
+
+DELETE FROM Movimiento;
+DBCC CHECKIDENT ('Movimiento', RESEED, 0);
+
+DELETE FROM BitacoraEvento;
+DBCC CHECKIDENT ('BitacoraEvento', RESEED, 0);
+
+DELETE FROM Empleado;
+DBCC CHECKIDENT ('Empleado', RESEED, 0);
+
+DELETE FROM Puesto;
+DBCC CHECKIDENT ('Puesto', RESEED, 0);
+
+DELETE FROM DBError;
+DBCC CHECKIDENT ('DBError', RESEED, 0);
+
+DELETE FROM TipoMovimiento;
+
+DELETE FROM TipoEvento;
+
+DELETE FROM Usuario;
+DBCC CHECKIDENT ('Usuario', RESEED, 0);
+
+DELETE FROM Error;
+DBCC CHECKIDENT ('Error', RESEED, 0);
+GO
