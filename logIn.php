@@ -1,4 +1,5 @@
 <?php
+ob_start(); // 🔹 Asegura que los encabezados funcionen aunque haya salida previa
 session_start();
 
 // 🔹 Datos de conexión
@@ -56,7 +57,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             // 🔹 Evaluar el código de resultado que devuelve el SP
             if ($outResultCode === 0) {
+                // ✅ Guardamos los datos de sesión
+                $_SESSION['userId'] = $outUserId;
                 $_SESSION['username'] = $username;
+
+                // ✅ Redirigimos al dashboard
                 header("Location: dashboard.php");
                 exit();
             } elseif ($outResultCode === 50001) {
@@ -74,6 +79,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         sqlsrv_close($conn);
     }
 }
+
+ob_end_flush(); // 🔹 Finaliza el buffer de salida
 ?>
 
 <!DOCTYPE html>
