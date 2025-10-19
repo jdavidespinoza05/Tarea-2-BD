@@ -9,7 +9,8 @@ $connectionOptions = array(
     "Uid" => "Espi",
     "PWD" => "Espi1234",
     "Encrypt" => true,
-    "TrustServerCertificate" => true
+    "TrustServerCertificate" => true,
+    "CharacterSet" => "UTF-8"
 );
 
 $error = "";
