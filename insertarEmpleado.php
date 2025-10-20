@@ -33,12 +33,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $idPuesto = $_POST["idPuesto"];
     $documento = trim($_POST["documento"]);
     $nombre = trim($_POST["nombre"]);
-    $fechaContratacion = date("Y-m-d"); // fecha actual
+    $fechaContratacion = date("Y-m-d");
     $userId = $_SESSION["userId"];
     $ip = $_SERVER["REMOTE_ADDR"];
     $outResultCode = 0;
 
-    // Llamada al SP
     $sql = "EXEC dbo.InsertEmpleado 
                 @inIdPuesto = ?, 
                 @inValorDocumentoIdentidad = ?, 
@@ -61,37 +60,37 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $stmt = sqlsrv_query($conn, $sql, $params);
 
     if ($stmt === false) {
-        $mensaje = "⚠️ Error al ejecutar el procedimiento almacenado.";
+        $mensaje = "Error al ejecutar el procedimiento almacenado.";
     } else {
         switch ($outResultCode) {
             case 0:
-                $mensaje = "✅ Empleado insertado correctamente.";
+                $mensaje = "Empleado insertado correctamente.";
                 $color = "green";
                 break;
             case 50004:
-                $mensaje = "❌ El documento ya existe.";
+                $mensaje = "El documento ya existe.";
                 break;
             case 50005:
-                $mensaje = "❌ El nombre ya existe.";
+                $mensaje = "El nombre ya existe.";
                 break;
             case 50008:
-                $mensaje = "❌ El puesto no existe.";
+                $mensaje = "El puesto no existe.";
                 break;
             case 50009:
-                $mensaje = "⚠️ Nombre inválido o vacío.";
+                $mensaje = "Nombre inválido o vacío.";
                 break;
             case 50010:
-                $mensaje = "⚠️ Documento inválido o vacío.";
+                $mensaje = "Documento inválido o vacío.";
                 break;
             default:
-                $mensaje = "⚠️ Error desconocido (Código $outResultCode).";
+                $mensaje = "Error desconocido (Código $outResultCode).";
         }
     }
 
     sqlsrv_free_stmt($stmt);
 }
 
-// Cargar lista de puestos para el dropdown
+// Cargar lista de puestos
 $puestos = [];
 $query = "SELECT Id, Nombre FROM Puesto ORDER BY Nombre ASC";
 $result = sqlsrv_query($conn, $query);
@@ -108,35 +107,103 @@ sqlsrv_close($conn);
 <head>
     <meta charset="UTF-8">
     <title>Insertar Empleado</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background-color: #f6f6f6;
+            font-family: "Segoe UI", Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.1);
+            width: 360px;
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+            font-weight: 600;
+        }
+        label {
+            display: block;
+            text-align: left;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #444;
+        }
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            margin-bottom: 16px;
+            font-size: 14px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: #0078d7;
+        }
+        button {
+            background-color: #222;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #444;
+        }
+        a {
+            display: inline-block;
+            margin-top: 16px;
+            color: #0078d7;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        a:hover {
+            text-decoration: underline;
+        }
+        .mensaje {
+            font-weight: bold;
+            margin-top: 12px;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
     <h2>Registrar nuevo empleado</h2>
 
     <form method="POST" action="">
-        <label for="documento">Documento de Identidad:</label><br>
-        <input type="text" name="documento" id="documento" maxlength="20" required><br><br>
+        <label for="documento">Documento de Identidad</label>
+        <input type="text" name="documento" id="documento" maxlength="20" required>
 
-        <label for="nombre">Nombre del Empleado:</label><br>
-        <input type="text" name="nombre" id="nombre" maxlength="100" required><br><br>
+        <label for="nombre">Nombre del Empleado</label>
+        <input type="text" name="nombre" id="nombre" maxlength="100" required>
 
-        <label for="idPuesto">Puesto:</label><br>
+        <label for="idPuesto">Puesto</label>
         <select name="idPuesto" id="idPuesto" required>
             <option value="">Seleccione un puesto</option>
             <?php foreach ($puestos as $p): ?>
                 <option value="<?= $p['Id'] ?>"><?= htmlspecialchars($p['Nombre']) ?></option>
             <?php endforeach; ?>
-        </select><br><br>
+        </select>
 
         <button type="submit">Insertar</button>
     </form>
 
     <?php if (!empty($mensaje)): ?>
-        <p style="color: <?= $color ?>; font-weight: bold;"><?= $mensaje ?></p>
+        <p class="mensaje" style="color: <?= $color ?>;"><?= $mensaje ?></p>
     <?php endif; ?>
 
-    <br>
     <a href="dashboard.php">⬅ Volver al Dashboard</a>
 </div>
 </body>
