@@ -55,7 +55,7 @@
     <errorCodigo Id="7" Codigo="50007" Descripcion="Empleado con mismo nombre ya existe en actualización" />
     <errorCodigo Id="8" Codigo="50008" Descripcion="Error de base de datos" />
     <errorCodigo Id="9" Codigo="50009" Descripcion="Nombre de empleado no alfabético" />
-    <errorCodigo Id="10" Codigo="50010" Descripcion="Valor de documento de identidad no alfabético" />
+    <errorCodigo Id="10" Codigo="50010" Descripcion="Valor de documento de identidad no numérico" />
     <errorCodigo Id="11" Codigo="50011" Descripcion="Monto del movimiento rechazado pues si se aplicar el saldo seria negativo." />
   </Error>
   <Empleados>
@@ -66,7 +66,7 @@
     <empleado Puesto="Conductor" ValorDocumentoIdentidad="23357035" Nombre="Nathan Lee" FechaContratacion="2021-07-25" />
     <empleado Puesto="Asistente" ValorDocumentoIdentidad="44223318" Nombre="Gerald Ponce" FechaContratacion="2022-10-27" />
     <empleado Puesto="Albañil" ValorDocumentoIdentidad="1463670" Nombre="Matthew Martin" FechaContratacion="2025-08-15" />
-    <empleado Puesto="Fontanero" ValorDocumentoIdentidad="25008030" Nombre="Matthew Rodriguez" FechaContratacion="2025-08-03" />
+    <empleado Puesto="Fontanero" ValorDocumentoIdentidad="25008030" Nombre="Matthew Rodriguez" FechaContratacion="2025-04-16" />
     <empleado Puesto="Cuidador" ValorDocumentoIdentidad="25381150" Nombre="Crystal Mills" FechaContratacion="2021-05-13" />
     <empleado Puesto="Recepcionista" ValorDocumentoIdentidad="6402399" Nombre="Shane Robinson" FechaContratacion="2025-03-13" />
     <empleado Puesto="Camarero" ValorDocumentoIdentidad="90886933" Nombre="Kevin Holmes" FechaContratacion="2017-12-17" />
@@ -83,8 +83,6 @@
   <Movimientos>
     <movimiento ValorDocId="26992786" IdTipoMovimiento="1" Fecha="2025-01-10" Monto="3" PostByUser="David" PostInIP="43.66.240.64" PostTime="2025-01-10 00:00:00" />
     <movimiento ValorDocId="26992786" IdTipoMovimiento="6" Fecha="2025-01-11" Monto="3" PostByUser="David" PostInIP="43.66.240.64" PostTime="2025-01-11 07:33:38" />
-    <movimiento ValorDocId="6402399" IdTipoMovimiento="3" Fecha="2025-01-12" Monto="4" PostByUser="Daniel" PostInIP="76.7.98.161" PostTime="2025-01-12 21:23:25" />
-    <movimiento ValorDocId="74794219" IdTipoMovimiento="1" Fecha="2025-01-15" Monto="1" PostByUser="Alejandro" PostInIP="210.239.208.137" PostTime="2025-01-15 03:39:11" />
     <movimiento ValorDocId="25381150" IdTipoMovimiento="1" Fecha="2025-01-19" Monto="5" PostByUser="Alex" PostInIP="120.60.29.65" PostTime="2025-01-19 00:00:00" />
     <movimiento ValorDocId="25381150" IdTipoMovimiento="5" Fecha="2025-01-20" Monto="5" PostByUser="Alex" PostInIP="120.60.29.65" PostTime="2025-01-20 18:18:08" />
     <movimiento ValorDocId="56917772" IdTipoMovimiento="2" Fecha="2025-01-26" Monto="5" PostByUser="David" PostInIP="167.95.180.65" PostTime="2025-01-26 00:00:42" />
@@ -103,7 +101,6 @@
     <movimiento ValorDocId="26992786" IdTipoMovimiento="1" Fecha="2025-02-27" Monto="5" PostByUser="Daniel" PostInIP="248.85.164.92" PostTime="2025-02-27 17:13:28" />
     <movimiento ValorDocId="23357035" IdTipoMovimiento="1" Fecha="2025-02-28" Monto="11" PostByUser="Daniel" PostInIP="190.114.70.192" PostTime="2025-02-28 00:00:00" />
     <movimiento ValorDocId="23357035" IdTipoMovimiento="5" Fecha="2025-03-01" Monto="3" PostByUser="David" PostInIP="190.114.70.192" PostTime="2025-03-01 22:06:42" />
-    <movimiento ValorDocId="74794219" IdTipoMovimiento="1" Fecha="2025-03-03" Monto="5" PostByUser="UsuarioScripts" PostInIP="192.228.93.183" PostTime="2025-03-03 12:36:39" />
     <movimiento ValorDocId="94377996" IdTipoMovimiento="1" Fecha="2025-03-09" Monto="3" PostByUser="Alex" PostInIP="212.122.53.118" PostTime="2025-03-09 00:00:00" />
     <movimiento ValorDocId="21086955" IdTipoMovimiento="2" Fecha="2025-03-09" Monto="1" PostByUser="Esteban" PostInIP="98.11.83.4" PostTime="2025-03-09 23:40:43" />
     <movimiento ValorDocId="94377996" IdTipoMovimiento="4" Fecha="2025-03-10" Monto="3" PostByUser="Alex" PostInIP="212.122.53.118" PostTime="2025-03-10 03:22:23" />
@@ -128,7 +125,6 @@
     <movimiento ValorDocId="90886933" IdTipoMovimiento="2" Fecha="2025-05-08" Monto="1" PostByUser="Daniel" PostInIP="159.122.81.68" PostTime="2025-05-08 08:47:26" />
     <movimiento ValorDocId="23357035" IdTipoMovimiento="5" Fecha="2025-05-09" Monto="4" PostByUser="Daniel" PostInIP="136.5.233.167" PostTime="2025-05-09 20:31:20" />
     <movimiento ValorDocId="44223318" IdTipoMovimiento="2" Fecha="2025-05-22" Monto="1" PostByUser="Alex" PostInIP="161.184.151.136" PostTime="2025-05-22 16:44:00" />
-    <movimiento ValorDocId="1463670" IdTipoMovimiento="2" Fecha="2025-05-25" Monto="1" PostByUser="Alejandro" PostInIP="209.33.102.178" PostTime="2025-05-25 05:15:58" />
     <movimiento ValorDocId="36042906" IdTipoMovimiento="1" Fecha="2025-06-02" Monto="2" PostByUser="Alejandro" PostInIP="107.251.169.29" PostTime="2025-06-02 00:00:00" />
     <movimiento ValorDocId="25090046" IdTipoMovimiento="3" Fecha="2025-06-03" Monto="3" PostByUser="David" PostInIP="96.202.21.227" PostTime="2025-06-03 02:02:50" />
     <movimiento ValorDocId="23357035" IdTipoMovimiento="6" Fecha="2025-06-03" Monto="2" PostByUser="UsuarioScripts" PostInIP="73.14.29.206" PostTime="2025-06-03 09:16:54" />

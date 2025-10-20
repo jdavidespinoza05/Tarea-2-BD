@@ -1,13 +1,13 @@
 USE Tarea2BD
 GO
 
---Mostrar las tablas creadas
+--Mostrar tablas creadas
 SELECT TABLE_SCHEMA, TABLE_NAME
 FROM INFORMATION_SCHEMA.TABLES
 WHERE TABLE_TYPE = 'BASE TABLE'
 ORDER BY TABLE_NAME;
 
---Ver los datos de todas las tablas por separado
+--Ver datos de todas las tablas
 SELECT * FROM Puesto;
 SELECT * FROM TipoEvento;
 SELECT * FROM TipoMovimiento;
@@ -15,7 +15,7 @@ SELECT * FROM Usuario;
 SELECT * FROM Empleado;
 SELECT * FROM Movimiento;
 
---Confirmar que es la cantidad de registros del XML
+--Confirmar la cantidad de registros del XML
 SELECT 'Puesto' AS Tabla, COUNT(*) AS Registros FROM Puesto
 UNION ALL
 SELECT 'TipoEvento', COUNT(*) FROM TipoEvento
