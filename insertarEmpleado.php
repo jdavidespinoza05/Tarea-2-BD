@@ -1,46 +1,44 @@
 <?php
 session_start();
 
-// 1. Verificar que el usuario tenga sesión activa
-if (!isset($_SESSION['userId']) || !isset($_SESSION['username'])) {
-    // Si no, lo mandamos al login
-    header("Location: login.php");
+// Si no hay sesión activa, redirigir al login
+if (!isset($_SESSION['userId'])) {
+    header("Location: logIn.php");
     exit();
 }
 
-// 2. Verificar que los datos lleguen por método POST
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// Datos de conexión
+$serverName = "mssql-203149-0.cloudclusters.net,10020";
+$connectionOptions = array(
+    "Database" => "Tarea2BD",
+    "Uid" => "Espi",
+    "PWD" => "Espi1234",
+    "Encrypt" => true,
+    "TrustServerCertificate" => true,
+    "CharacterSet" => "UTF-8"
+);
 
-    // 3. Incluir conexión a la BD
-    $serverName = "mssql-203149-0.cloudclusters.net,10020";
-    $connectionOptions = array(
-        "Database" => "Tarea2BD",
-        "Uid" => "Espi",
-        "PWD" => "Espi1234",
-        "Encrypt" => true,
-        "TrustServerCertificate" => true
-    );
-    $conn = sqlsrv_connect($serverName, $connectionOptions);
+$conn = sqlsrv_connect($serverName, $connectionOptions);
 
-    if (!$conn) {
-        // Si falla la conexión, guardar error en sesión y redirigir
-        $_SESSION['message_error'] = "Error de conexión a la BD al intentar insertar.";
-        header("Location: dashboard.php");
-        exit();
-    }
+if ($conn === false) {
+    die("❌ Error de conexión a la base de datos.");
+}
 
-    // 4. Recolectar datos del formulario (POST) y de la Sesión
-    $inIdPuesto = $_POST['idPuesto'];
-    $inValorDocumentoIdentidad = $_POST['documento'];
-    $inNombre = $_POST['nombre'];
-    
-    // Datos requeridos por el SP que no vienen del formulario
-    $inFechaContratacion = (new DateTime())->format('Y-m-d'); // Fecha de hoy
-    $inUserId = $_SESSION['userId'];
-    $inIP = $_SERVER['REMOTE_ADDR'];
-    $outResultCode = 0; // Variable de salida
+// Variables
+$mensaje = "";
+$color = "red";
 
-    // 5. Preparar y ejecutar el SP
+// Si el formulario se envía
+if ($_SERVER["REQUEST_METHOD"] === "POST") {
+    $idPuesto = $_POST["idPuesto"];
+    $documento = trim($_POST["documento"]);
+    $nombre = trim($_POST["nombre"]);
+    $fechaContratacion = date("Y-m-d"); // fecha actual
+    $userId = $_SESSION["userId"];
+    $ip = $_SERVER["REMOTE_ADDR"];
+    $outResultCode = 0;
+
+    // Llamada al SP
     $sql = "EXEC dbo.InsertEmpleado 
                 @inIdPuesto = ?, 
                 @inValorDocumentoIdentidad = ?, 
@@ -51,50 +49,95 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 @outResultCode = ?";
 
     $params = array(
-        array($inIdPuesto, SQLSRV_PARAM_IN),
-        array($inValorDocumentoIdentidad, SQLSRV_PARAM_IN),
-        array($inNombre, SQLSRV_PARAM_IN),
-        array($inFechaContratacion, SQLSRV_PARAM_IN),
-        array($inUserId, SQLSRV_PARAM_IN),
-        array($inIP, SQLSRV_PARAM_IN),
-        array(&$outResultCode, SQLSRV_PARAM_OUT) // Parámetro de salida
+        array($idPuesto, SQLSRV_PARAM_IN),
+        array($documento, SQLSRV_PARAM_IN),
+        array($nombre, SQLSRV_PARAM_IN),
+        array($fechaContratacion, SQLSRV_PARAM_IN),
+        array($userId, SQLSRV_PARAM_IN),
+        array($ip, SQLSRV_PARAM_IN),
+        array(&$outResultCode, SQLSRV_PARAM_OUT)
     );
 
     $stmt = sqlsrv_query($conn, $sql, $params);
 
-    // 6. Interpretar el resultado y crear mensaje flash
-    if ($stmt) {
-        if ($outResultCode == 0) {
-            // Éxito
-            $_SESSION['message_success'] = "¡Empleado '" . htmlspecialchars($inNombre) . "' insertado con éxito!";
-        } else {
-            // Error controlado por el SP
-            $error_msg = "Error desconocido (Código $outResultCode).";
-            
-            // Mapeamos los códigos de error que definiste en tu SP
-            if ($outResultCode == 50008) $error_msg = "Error: El puesto seleccionado no existe.";
-            if ($outResultCode == 50010) $error_msg = "Error: El documento de identidad debe ser solo números y no estar vacío.";
-            if ($outResultCode == 50009) $error_msg = "Error: El nombre contiene caracteres no válidos o está vacío.";
-            if ($outResultCode == 50004) $error_msg = "Error: El documento de identidad '" . htmlspecialchars($inValorDocumentoIdentidad) . "' ya existe.";
-            if ($outResultCode == 50005) $error_msg = "Error: El nombre '" . htmlspecialchars($inNombre) . "' ya existe.";
-            
-            $_SESSION['message_error'] = $error_msg;
-        }
+    if ($stmt === false) {
+        $mensaje = "⚠️ Error al ejecutar el procedimiento almacenado.";
     } else {
-        // Error grave de SQL (ej. SP no existe, permisos, etc.)
-        $_SESSION['message_error'] = "Error fatal al ejecutar el SP: " . print_r(sqlsrv_errors(), true);
+        switch ($outResultCode) {
+            case 0:
+                $mensaje = "✅ Empleado insertado correctamente.";
+                $color = "green";
+                break;
+            case 50004:
+                $mensaje = "❌ El documento ya existe.";
+                break;
+            case 50005:
+                $mensaje = "❌ El nombre ya existe.";
+                break;
+            case 50008:
+                $mensaje = "❌ El puesto no existe.";
+                break;
+            case 50009:
+                $mensaje = "⚠️ Nombre inválido o vacío.";
+                break;
+            case 50010:
+                $mensaje = "⚠️ Documento inválido o vacío.";
+                break;
+            default:
+                $mensaje = "⚠️ Error desconocido (Código $outResultCode).";
+        }
     }
 
-    // 7. Limpiar y redirigir de vuelta al dashboard
     sqlsrv_free_stmt($stmt);
-    sqlsrv_close($conn);
-
-} else {
-    // Si alguien intenta acceder a este archivo directamente
-    $_SESSION['message_error'] = "Acceso no válido. Utilice el formulario.";
 }
 
-// Redirigir siempre de vuelta al dashboard
-header("Location: dashboard.php");
-exit();
+// Cargar lista de puestos para el dropdown
+$puestos = [];
+$query = "SELECT Id, Nombre FROM Puesto ORDER BY Nombre ASC";
+$result = sqlsrv_query($conn, $query);
+if ($result) {
+    while ($row = sqlsrv_fetch_array($result, SQLSRV_FETCH_ASSOC)) {
+        $puestos[] = $row;
+    }
+}
+sqlsrv_close($conn);
 ?>
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Insertar Empleado</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="container">
+    <h2>Registrar nuevo empleado</h2>
+
+    <form method="POST" action="">
+        <label for="documento">Documento de Identidad:</label><br>
+        <input type="text" name="documento" id="documento" maxlength="20" required><br><br>
+
+        <label for="nombre">Nombre del Empleado:</label><br>
+        <input type="text" name="nombre" id="nombre" maxlength="100" required><br><br>
+
+        <label for="idPuesto">Puesto:</label><br>
+        <select name="idPuesto" id="idPuesto" required>
+            <option value="">Seleccione un puesto</option>
+            <?php foreach ($puestos as $p): ?>
+                <option value="<?= $p['Id'] ?>"><?= htmlspecialchars($p['Nombre']) ?></option>
+            <?php endforeach; ?>
+        </select><br><br>
+
+        <button type="submit">Insertar</button>
+    </form>
+
+    <?php if (!empty($mensaje)): ?>
+        <p style="color: <?= $color ?>; font-weight: bold;"><?= $mensaje ?></p>
+    <?php endif; ?>
+
+    <br>
+    <a href="dashboard.php">⬅ Volver al Dashboard</a>
+</div>
+</body>
+</html>
