@@ -38,7 +38,7 @@ $empleados = $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 
         body {
-            background-color: #0e0e0e;
+            background-color: #121212;
             color: #f2f2f2;
             padding: 40px;
             display: flex;
@@ -50,7 +50,7 @@ $empleados = $stmt->fetchAll(PDO::FETCH_ASSOC);
             margin-bottom: 30px;
             font-weight: 600;
             font-size: 28px;
-            color: #ffffff;
+            color: #eaeaea;
         }
 
         /* Formularios */
@@ -103,6 +103,7 @@ $empleados = $stmt->fetchAll(PDO::FETCH_ASSOC);
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            border: 3px solid #646464ff; /* borde ligeramente más claro */
         }
 
         th, td {
@@ -203,17 +204,17 @@ $empleados = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <button type="submit" class="action-btn modificar">Modificar</button>
                         </form>
 
-                        <!-- Borrar -->
-                        <a href="borrarEmpleado.php?empleadoId=<?= $emp['Id'] ?>" onclick="return confirm('¿Está seguro que desea eliminar este empleado?');">
-                            <button type="button" class="action-btn borrar">Borrar</button>
-                        </a>
-
                         <!-- Movimientos -->
                         <form method="GET" action="listarMovimientos.php" style="display:inline;">
                             <input type="hidden" name="empleadoId" value="<?= $emp['Id'] ?>">
                             <button type="submit" class="action-btn movimientos">Movimientos</button>
                         </form>
 
+                        <!-- Borrar -->
+                        <a href="borrarEmpleado.php?empleadoId=<?= $emp['Id'] ?>" onclick="return confirm('¿Está seguro que desea eliminar este empleado?');">
+                            <button type="button" class="action-btn borrar">Borrar</button>
+                        </a>
+                        
                     </td>
                 </tr>
             <?php endforeach; ?>

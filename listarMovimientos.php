@@ -135,12 +135,12 @@ $movimientos = $stmtMov->fetchAll(PDO::FETCH_ASSOC);
         }
 
         .btn-agregar {
-            background-color: #4CAF50;
+            background-color: #0078d7;
             color: white;
         }
 
         .btn-agregar:hover {
-            background-color: #3e8e41;
+            background-color: #005fa3;
         }
 
         .btn-volver {
