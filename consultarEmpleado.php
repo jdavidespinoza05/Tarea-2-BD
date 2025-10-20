@@ -35,63 +35,67 @@ if (!$empleado) die("Empleado no encontrado.");
 <head>
     <meta charset="UTF-8">
     <title>Consultar Empleado</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #f5f5f5;
-            color: #1c1c1c;
+            background-color: #1e1e1e;
+            font-family: "Segoe UI", Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            height: 100vh;
             margin: 0;
-            padding: 20px;
+            color: #fff;
         }
 
         .container {
+            background-color: #2a2a2a;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 0 12px rgba(0,0,0,0.3);
+            width: 360px;
             text-align: center;
-            max-width: 500px;
-            width: 100%;
         }
 
         h2 {
-            font-weight: 600;
             margin-bottom: 25px;
-            font-size: 26px;
+            color: #f5f5f5;
+            font-weight: 600;
         }
 
         .empleado-info {
-            background-color: #fff;
-            padding: 20px 25px;
+            background-color: #1b1b1b;
+            padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            margin-bottom: 20px;
+            border: 1px solid #444;
             text-align: left;
+            margin-bottom: 20px;
         }
 
         .empleado-info p {
-            margin-bottom: 15px;
-            font-size: 16px;
+            margin: 10px 0;
+            font-size: 15px;
+            color: #ddd;
         }
 
         .empleado-info p strong {
-            color: #1c1c1c;
+            color: #fff;
         }
 
         .btn-back {
             display: inline-block;
-            padding: 8px 16px;
-            background-color: #1c1c1c;
-            color: #fff;
+            background-color: #0078d7;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 14px;
             text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: all 0.2s ease;
+            cursor: pointer;
+            transition: background 0.2s ease;
         }
 
         .btn-back:hover {
-            opacity: 0.85;
+            background-color: #005fa3;
         }
     </style>
 </head>

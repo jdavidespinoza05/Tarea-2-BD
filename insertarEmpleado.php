@@ -109,7 +109,7 @@ sqlsrv_close($conn);
     <title>Insertar Empleado</title>
     <style>
         body {
-            background-color: #f6f6f6;
+            background-color: #1e1e1e;
             font-family: "Segoe UI", Arial, sans-serif;
             display: flex;
             justify-content: center;
@@ -117,65 +117,96 @@ sqlsrv_close($conn);
             height: 100vh;
             margin: 0;
         }
+
         .container {
-            background-color: white;
-            padding: 40px;
+            background-color: #2a2a2a;
+            padding: 40px 30px;
             border-radius: 12px;
-            box-shadow: 0 0 12px rgba(0,0,0,0.1);
+            box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
             width: 360px;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
+
         h2 {
-            margin-bottom: 20px;
-            color: #333;
+            margin-bottom: 25px;
+            color: #f5f5f5;
             font-weight: 600;
         }
+
+        form {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
         label {
-            display: block;
-            text-align: left;
+            align-self: flex-start;
             margin-bottom: 6px;
             font-size: 14px;
-            color: #444;
+            color: #aaa;
         }
+
         input, select {
-            width: 100%;
-            padding: 8px;
+            width: 90%;
+            padding: 8px 10px;
             border-radius: 6px;
-            border: 1px solid #ccc;
+            background-color: #1b1b1b;
+            color: #fff;
+            border: 1px solid #444;
             margin-bottom: 16px;
             font-size: 14px;
+            text-align: left; /* Alinea el texto a la izquierda */
+            box-sizing: border-box;
         }
-        input:focus, select:focus {
-            outline: none;
-            border-color: #0078d7;
+
+        /* Ajuste especial para el select */
+        select {
+            appearance: none; /* Quita estilo nativo (en la mayoría de navegadores) */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%23fff' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 10px;
+            padding-right: 28px; /* Deja espacio para la flecha */
         }
+
         button {
-            background-color: #222;
+            background-color: #0078d7;
             color: white;
             border: none;
             border-radius: 6px;
             padding: 10px 20px;
             font-size: 14px;
             cursor: pointer;
-            width: 100%;
+            width: 90%;
         }
+
         button:hover {
-            background-color: #444;
+            background-color: #005fa3;
         }
+
         a {
-            display: inline-block;
-            margin-top: 16px;
-            color: #0078d7;
+            color: #bbb;
             text-decoration: none;
-            font-size: 13px;
+            display: block;
+            margin-top: 14px;
+            font-size: 14px;
         }
+
         a:hover {
-            text-decoration: underline;
+            color: #fff;
         }
+
         .mensaje {
             font-weight: bold;
             margin-top: 12px;
         }
+
     </style>
 </head>
 <body>
@@ -204,7 +235,7 @@ sqlsrv_close($conn);
         <p class="mensaje" style="color: <?= $color ?>;"><?= $mensaje ?></p>
     <?php endif; ?>
 
-    <a href="dashboard.php">⬅ Volver al Dashboard</a>
+    <a href="dashboard.php">Volver al Dashboard</a>
 </div>
 </body>
 </html>

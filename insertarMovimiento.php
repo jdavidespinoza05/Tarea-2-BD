@@ -66,9 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     VALUES (:idEmpleado, :idTipoMovimiento, GETDATE(), :monto, :nuevoSaldo, :userId, :ip, GETDATE())
                 ");
 
-                // Asumiendo que ya tienes sesión y usuario logueado
                 session_start();
-                $userId = $_SESSION['userId'] ?? 1; // Default 1 si no hay sesión
+                $userId = $_SESSION['userId'] ?? 1;
                 $userIP = $_SERVER['REMOTE_ADDR'];
 
                 $stmtInsert->bindParam(':idEmpleado', $empleadoId, PDO::PARAM_INT);
@@ -80,13 +79,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $stmtInsert->execute();
 
-                // Actualizar saldo en empleado
+                // Actualizar saldo
                 $stmtUpdate = $conn->prepare("UPDATE Empleado SET SaldoVacaciones = :nuevoSaldo WHERE Id = :id");
                 $stmtUpdate->bindParam(':nuevoSaldo', $nuevoSaldo);
                 $stmtUpdate->bindParam(':id', $empleadoId, PDO::PARAM_INT);
                 $stmtUpdate->execute();
 
-                // Redireccionar al listado de movimientos
                 header("Location: listarMovimientos.php?empleadoId=$empleadoId");
                 exit;
             }
@@ -102,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Insertar Movimiento - <?= htmlspecialchars($empleado['Nombre']) ?></title>
     <style>
         body {
-            background-color: #111;
+            background-color: #1e1e1e;
             color: #f2f2f2;
             font-family: Arial, sans-serif;
             display: flex;
@@ -112,40 +110,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin: 0;
         }
         .box {
-            background-color: #1c1c1c;
+            background-color: #2a2a2a;
             padding: 30px 40px;
             border-radius: 10px;
             width: 340px;
-            box-shadow: 0 0 10px rgba(255,255,255,0.1);
+            border: 1px solid #2c2c2c;
         }
         h1 {
-            font-size: 20px;
+            font-size: 22px;
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             color: #fff;
         }
         label {
             display: block;
             margin-top: 12px;
             font-weight: bold;
+            font-size: 14px;
         }
         input, select {
             width: 100%;
-            padding: 7px;
+            padding: 8px 10px;
             margin-top: 5px;
-            border: none;
+            border: 1px solid #333;
             border-radius: 5px;
-            background-color: #2a2a2a;
+            background-color: #242424;
             color: #fff;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+        select {
+            appearance: none;
+            text-align: left;
+        }
+        input:disabled {
+            color: #aaa;
+            background-color: #1e1e1e;
         }
         button {
-            margin-top: 15px;
-            padding: 8px 15px;
+            margin-top: 18px;
+            padding: 9px 15px;
             border: none;
             border-radius: 5px;
             background-color: #333;
             color: #fff;
             cursor: pointer;
+            font-weight: bold;
         }
         button:hover {
             background-color: #555;
@@ -158,6 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         .actions {
             display: flex;
             justify-content: space-between;
+            gap: 10px;
         }
     </style>
 </head>
