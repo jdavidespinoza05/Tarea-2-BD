@@ -20,7 +20,7 @@ try {
     die("Error de conexión: " . $e->getMessage());
 }
 
-// Consultar información del empleado
+// Consultar información del empleado (Esto se mantiene igual)
 $stmtEmp = $conn->prepare("SELECT ValorDocumentoIdentidad, Nombre, SaldoVacaciones FROM Empleado WHERE Id = :idEmpleado");
 $stmtEmp->bindParam(':idEmpleado', $empleadoId, PDO::PARAM_INT);
 $stmtEmp->execute();
@@ -30,26 +30,19 @@ if (!$empleado) {
     die("Empleado no encontrado.");
 }
 
-// Consultar movimientos del empleado
-$sqlMovimientos = "
-    SELECT 
-        m.Fecha,
-        tm.Nombre AS TipoMovimiento,
-        m.Monto,
-        m.NuevoSaldo,
-        u.Username AS Usuario,
-        m.PostInIp,
-        m.PostTime
-    FROM Movimiento m
-    INNER JOIN TipoMovimiento tm ON m.IdTipoMovimiento = tm.Id
-    INNER JOIN Usuario u ON m.IdPostByUser = u.Id
-    WHERE m.IdEmpleado = :idEmpleado
-    ORDER BY m.Fecha DESC, m.Id DESC
-";
-$stmtMov = $conn->prepare($sqlMovimientos);
-$stmtMov->bindParam(':idEmpleado', $empleadoId, PDO::PARAM_INT);
-$stmtMov->execute();
-$movimientos = $stmtMov->fetchAll(PDO::FETCH_ASSOC);
+
+// Consultar movimientos del empleado usando el SP
+try {
+    $sqlMovimientos = "EXEC dbo.ListMovimientosPorEmpleadoId @inIdEmpleado = :idEmpleado";
+    $stmtMov = $conn->prepare($sqlMovimientos);
+    $stmtMov->bindParam(':idEmpleado', $empleadoId, PDO::PARAM_INT);
+    $stmtMov->execute();
+    $movimientos = $stmtMov->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    // Manejar errores si el SP falla
+    die("Error al consultar movimientos: " . $e->getMessage());
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -57,6 +50,7 @@ $movimientos = $stmtMov->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <title>Movimientos de <?= htmlspecialchars($empleado['Nombre']) ?></title>
     <style>
+        /* ... Tu CSS (sin cambios) ... */
         body {
             font-family: 'Segoe UI', sans-serif;
             background-color: #1e1e1e;
