@@ -1,4 +1,7 @@
 <?php
+// Establecer zona horaria de Costa Rica
+date_default_timezone_set('America/Costa_Rica');
+
 // Conexión a la base de datos
 $serverName = "mssql-203149-0.cloudclusters.net,10020";
 $database = "Tarea2BD";
@@ -29,7 +32,7 @@ if (!$empleado) {
 }
 
 // Obtener tipos de movimiento
-$stmtTipos = $conn->query("SELECT Id, Nombre, TipoAccion FROM TipoMovimiento");
+$stmtTipos = $conn->query("SELECT Id, Nombre FROM TipoMovimiento");
 $tiposMovimiento = $stmtTipos->fetchAll(PDO::FETCH_ASSOC);
 
 $error = "";
@@ -41,53 +44,49 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (!$tipoMovimientoId || !$monto) {
         $error = "Debe seleccionar un tipo de movimiento y un monto.";
     } else {
-        $monto = (float) $monto;
+        try {
+            session_start();
+            $userId = $_SESSION['userId'] ?? 1;
+            $userIP = $_SERVER['REMOTE_ADDR'];
 
-        // Obtener TipoAccion (1 o -1)
-        $stmtTipo = $conn->prepare("SELECT TipoAccion FROM TipoMovimiento WHERE Id = :id");
-        $stmtTipo->bindParam(':id', $tipoMovimientoId, PDO::PARAM_INT);
-        $stmtTipo->execute();
-        $tipoAccion = $stmtTipo->fetchColumn();
+            // Fechas locales de Costa Rica
+            $fecha = date('Y-m-d');          // tipo DATE
+            $postTime = date('Y-m-d H:i:s'); // tipo DATETIME
 
-        if ($tipoAccion === false) {
-            $error = "Tipo de movimiento inválido.";
-        } else {
-            $tipoAccion = (float) $tipoAccion;
-            $saldoActual = (float) $empleado['SaldoVacaciones'];
-            $nuevoSaldo = $saldoActual + ($monto * $tipoAccion);
+            // Llamada al SP con parámetros correctos
+            $stmt = $conn->prepare("
+                DECLARE @resultCode INT;
+                EXEC dbo.InsertMovimiento 
+                    @inValorDocumentoIdentidad = :valorDoc,
+                    @inIdTipoMovimiento = :idTipoMovimiento,
+                    @inMonto = :monto,
+                    @inFecha = :fecha,
+                    @inPostTime = :postTime,
+                    @inUserId = :userId,
+                    @inIP = :userIP,
+                    @outResultCode = @resultCode OUTPUT;
+                SELECT @resultCode AS resultCode;
+            ");
 
-            if ($nuevoSaldo < 0) {
-                $error = "No se puede aplicar el movimiento porque el saldo quedaría negativo.";
-            } else {
-                // Insertar movimiento
-                $stmtInsert = $conn->prepare("
-                    INSERT INTO Movimiento 
-                    (IdEmpleado, IdTipoMovimiento, Fecha, Monto, NuevoSaldo, IdPostByUser, PostInIp, PostTime)
-                    VALUES (:idEmpleado, :idTipoMovimiento, GETDATE(), :monto, :nuevoSaldo, :userId, :ip, GETDATE())
-                ");
+            $stmt->bindParam(':valorDoc', $empleado['ValorDocumentoIdentidad'], PDO::PARAM_STR);
+            $stmt->bindParam(':idTipoMovimiento', $tipoMovimientoId, PDO::PARAM_INT);
+            $stmt->bindParam(':monto', $monto);
+            $stmt->bindParam(':fecha', $fecha);
+            $stmt->bindParam(':postTime', $postTime);
+            $stmt->bindParam(':userId', $userId, PDO::PARAM_INT);
+            $stmt->bindParam(':userIP', $userIP, PDO::PARAM_STR);
 
-                session_start();
-                $userId = $_SESSION['userId'] ?? 1;
-                $userIP = $_SERVER['REMOTE_ADDR'];
+            $stmt->execute();
 
-                $stmtInsert->bindParam(':idEmpleado', $empleadoId, PDO::PARAM_INT);
-                $stmtInsert->bindParam(':idTipoMovimiento', $tipoMovimientoId, PDO::PARAM_INT);
-                $stmtInsert->bindParam(':monto', $monto);
-                $stmtInsert->bindParam(':nuevoSaldo', $nuevoSaldo);
-                $stmtInsert->bindParam(':userId', $userId, PDO::PARAM_INT);
-                $stmtInsert->bindParam(':ip', $userIP, PDO::PARAM_STR);
-
-                $stmtInsert->execute();
-
-                // Actualizar saldo
-                $stmtUpdate = $conn->prepare("UPDATE Empleado SET SaldoVacaciones = :nuevoSaldo WHERE Id = :id");
-                $stmtUpdate->bindParam(':nuevoSaldo', $nuevoSaldo);
-                $stmtUpdate->bindParam(':id', $empleadoId, PDO::PARAM_INT);
-                $stmtUpdate->execute();
-
-                header("Location: listarMovimientos.php?empleadoId=$empleadoId");
-                exit;
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            if ($result && $result['resultCode'] != 0) {
+                throw new Exception("Error en el procedimiento: código " . $result['resultCode']);
             }
+
+            header("Location: listarMovimientos.php?empleadoId=$empleadoId");
+            exit;
+        } catch (Exception $e) {
+            $error = "Error al insertar movimiento: " . $e->getMessage();
         }
     }
 }
