@@ -33,7 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $idPuesto = $_POST["idPuesto"];
     $documento = trim($_POST["documento"]);
     $nombre = trim($_POST["nombre"]);
-    $fechaContratacion = date("Y-m-d");
     $userId = $_SESSION["userId"];
     $ip = $_SERVER["REMOTE_ADDR"];
     $outResultCode = 0;
@@ -42,7 +41,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 @inIdPuesto = ?, 
                 @inValorDocumentoIdentidad = ?, 
                 @inNombre = ?, 
-                @inFechaContratacion = ?, 
                 @inUserId = ?, 
                 @inIP = ?, 
                 @outResultCode = ?";
@@ -51,7 +49,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         array($idPuesto, SQLSRV_PARAM_IN),
         array($documento, SQLSRV_PARAM_IN),
         array($nombre, SQLSRV_PARAM_IN),
-        array($fechaContratacion, SQLSRV_PARAM_IN),
         array($userId, SQLSRV_PARAM_IN),
         array($ip, SQLSRV_PARAM_IN),
         array(&$outResultCode, SQLSRV_PARAM_OUT)
