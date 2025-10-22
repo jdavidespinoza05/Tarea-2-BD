@@ -11,9 +11,9 @@ $connectionOptions = array(
 $conn = sqlsrv_connect($serverName, $connectionOptions);
 
 if ($conn) {
-    echo "✅ Conexión exitosa a CloudCluster!";
+    echo "Conexión exitosa";
 } else {
-    echo "❌ Error de conexión.<br>";
+    echo "Error de conexión.<br>";
     die(print_r(sqlsrv_errors(), true));
 }
 ?>

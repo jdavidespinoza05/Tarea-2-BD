@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-// 🔹 Conexión a la base de datos
+// Conexión a la base de datos
 $serverName = "mssql-203149-0.cloudclusters.net,10020";
 $database = "Tarea2BD";
 $username = "Espi";
@@ -14,7 +14,7 @@ try {
     die("Error de conexión: " . $e->getMessage());
 }
 
-// 🔹 Capturar acción y empleado
+// Capturar acción y empleado
 $accion = isset($_POST['accion']) ? $_POST['accion'] : '';
 $empleadoId = isset($_POST['empleadoId']) ? intval($_POST['empleadoId']) : 0;
 
@@ -22,7 +22,7 @@ if ($empleadoId <= 0) {
     die("Empleado no especificado.");
 }
 
-// 🔹 Dependiendo de la acción
+// Dependiendo de la acción
 switch ($accion) {
     case 'modificar':
         // Redirigir al form de modificar

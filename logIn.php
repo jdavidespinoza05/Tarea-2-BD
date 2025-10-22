@@ -1,8 +1,8 @@
 <?php
-ob_start(); // 🔹 Asegura que los encabezados funcionen aunque haya salida previa
+ob_start(); 
 session_start();
 
-// 🔹 Datos de conexión
+// Datos de conexión
 $serverName = "mssql-203149-0.cloudclusters.net,10020";
 $connectionOptions = array(
     "Database" => "Tarea2BD",
@@ -15,7 +15,7 @@ $connectionOptions = array(
 
 $error = "";
 
-// 🔹 Cuando el usuario envía el formulario
+// Cuando el usuario envía el formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -25,13 +25,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $conn = sqlsrv_connect($serverName, $connectionOptions);
 
     if ($conn === false) {
-        $error = "❌ Error de conexión a la base de datos.";
+        $error = "Error de conexión a la base de datos.";
     } else {
-        // 🔹 Definir variables de salida con tipo explícito
         $outResultCode = 0;
         $outUserId = 0;
 
-        // 🔹 Preparar la consulta con EXEC
+        // Preparar la consulta con EXEC
         $sql = "EXEC dbo.LoginUser 
                     @inUserName = ?, 
                     @inPassword = ?, 
@@ -51,18 +50,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         if ($stmt === false) {
             $errors = sqlsrv_errors();
-            $error = "⚠️ Error al ejecutar el procedimiento almacenado.<br>";
+            $error = "Error al ejecutar el procedimiento almacenado.<br>";
             foreach ($errors as $e) {
                 $error .= "Código: " . $e['code'] . " — " . $e['message'] . "<br>";
             }
         } else {
-            // 🔹 Evaluar el código de resultado que devuelve el SP
+            // Evaluar el código de resultado que devuelve el SP
             if ($outResultCode === 0) {
-                // ✅ Guardamos los datos de sesión
+                // Guardar los datos de sesión
                 $_SESSION['userId'] = $outUserId;
                 $_SESSION['username'] = $username;
 
-                // ✅ Redirigimos al dashboard
+                // Redirigir al dashboard
                 header("Location: dashboard.php");
                 exit();
             } elseif ($outResultCode === 50001) {
@@ -81,7 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-ob_end_flush(); // 🔹 Finaliza el buffer de salida
+ob_end_flush(); // Finaliza el buffer de salida
 ?>
 
 <!DOCTYPE html>

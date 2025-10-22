@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Si no hay sesión activa, redirigir al login
 if (!isset($_SESSION['userId'])) {
     header("Location: logIn.php");
     exit();
@@ -21,7 +20,7 @@ $connectionOptions = array(
 $conn = sqlsrv_connect($serverName, $connectionOptions);
 
 if ($conn === false) {
-    die("❌ Error de conexión a la base de datos.");
+    die("Error de conexión a la base de datos.");
 }
 
 // Variables
@@ -156,20 +155,19 @@ sqlsrv_close($conn);
             border: 1px solid #444;
             margin-bottom: 16px;
             font-size: 14px;
-            text-align: left; /* Alinea el texto a la izquierda */
+            text-align: left; 
             box-sizing: border-box;
         }
 
-        /* Ajuste especial para el select */
         select {
-            appearance: none; /* Quita estilo nativo (en la mayoría de navegadores) */
+            appearance: none; 
             -webkit-appearance: none;
             -moz-appearance: none;
             background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%23fff' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
             background-repeat: no-repeat;
             background-position: right 10px center;
             background-size: 10px;
-            padding-right: 28px; /* Deja espacio para la flecha */
+            padding-right: 28px; 
         }
 
         button {

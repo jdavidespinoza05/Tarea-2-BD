@@ -1,6 +1,4 @@
 <?php
-// listarMovimientos.php
-
 // Verificar que se reciba el empleadoId
 if (!isset($_GET['empleadoId']) || empty($_GET['empleadoId'])) {
     die("Empleado no especificado.");
@@ -20,7 +18,7 @@ try {
     die("Error de conexión: " . $e->getMessage());
 }
 
-// Consultar información del empleado (Esto se mantiene igual)
+// Consultar información del empleado 
 $stmtEmp = $conn->prepare("SELECT ValorDocumentoIdentidad, Nombre, SaldoVacaciones FROM Empleado WHERE Id = :idEmpleado");
 $stmtEmp->bindParam(':idEmpleado', $empleadoId, PDO::PARAM_INT);
 $stmtEmp->execute();
@@ -50,7 +48,6 @@ try {
     <meta charset="UTF-8">
     <title>Movimientos de <?= htmlspecialchars($empleado['Nombre']) ?></title>
     <style>
-        /* ... Tu CSS (sin cambios) ... */
         body {
             font-family: 'Segoe UI', sans-serif;
             background-color: #1e1e1e;

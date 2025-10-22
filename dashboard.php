@@ -29,7 +29,6 @@ $empleados = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <title>Dashboard - Empleados</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        /* Reset básico */
         * {
             box-sizing: border-box;
             margin: 0;
@@ -53,7 +52,6 @@ $empleados = $stmt->fetchAll(PDO::FETCH_ASSOC);
             color: #eaeaea;
         }
 
-        /* Formularios */
         form {
             margin-bottom: 20px;
         }
@@ -94,16 +92,15 @@ $empleados = $stmt->fetchAll(PDO::FETCH_ASSOC);
             color: #fff;
         }
 
-        /* Tabla */
         table {
             border-collapse: collapse;
-            width: 95%; /* Más ancha */
+            width: 95%; 
             max-width: 1300px;
             background-color: #1a1a1a;
             border-radius: 10px;
             overflow: hidden;
             box-shadow: 0 0 20px rgba(0,0,0,0.3);
-            border: 3px solid #646464ff; /* borde ligeramente más claro */
+            border: 3px solid #646464ff; 
         }
 
         th, td {
@@ -132,7 +129,7 @@ $empleados = $stmt->fetchAll(PDO::FETCH_ASSOC);
             background-color: #1f1f1f;
         }
 
-        /* Botones de acción */
+
         .action-btn {
             padding: 7px 12px;
             font-size: 14px;
@@ -152,7 +149,6 @@ $empleados = $stmt->fetchAll(PDO::FETCH_ASSOC);
             transform: scale(1.03);
         }
 
-        /* Contenedor de botones en td */
         td form, td a {
             display: inline-block;
             margin-bottom: 3px;

@@ -49,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $userId = $_SESSION['userId'] ?? 1;
             $userIP = $_SERVER['REMOTE_ADDR'];
 
-            // Fechas locales de Costa Rica
             $fecha = date('Y-m-d');          // tipo DATE
             $postTime = date('Y-m-d H:i:s'); // tipo DATETIME
 

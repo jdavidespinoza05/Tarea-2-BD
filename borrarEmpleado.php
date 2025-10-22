@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// --- Config DB
 $serverName = "mssql-203149-0.cloudclusters.net,10020";
 $database   = "Tarea2BD";
 $username   = "Espi";

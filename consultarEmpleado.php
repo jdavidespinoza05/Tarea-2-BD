@@ -14,7 +14,7 @@ try {
     die("Error en la base de datos: " . $e->getMessage());
 }
 
-// Obtener empleadoId desde GET
+// Obtener empleadoId
 $empleadoId = $_GET['empleadoId'] ?? null;
 if (!$empleadoId) die("Empleado no especificado.");
 
